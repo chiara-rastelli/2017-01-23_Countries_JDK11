@@ -1,8 +1,11 @@
 package it.polito.tdp.borders;
 
 import java.net.URL;
+import java.util.Map;
 import java.util.ResourceBundle;
 
+import it.polito.tdp.borders.model.Country;
+import it.polito.tdp.borders.model.CountryWithNeighbors;
 import it.polito.tdp.borders.model.Model;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -24,7 +27,7 @@ public class FXMLController {
     private TextField txtAnno;
 
     @FXML
-    private ComboBox<?> boxNazione;
+    private ComboBox<Country> boxNazione;
 
     @FXML
     private TextArea txtResult;
@@ -49,11 +52,27 @@ public class FXMLController {
     		return;
     	}
     	model.creaGrafo(anno);
+    	for (CountryWithNeighbors c : model.getCountryAndConfinanti())
+			this.txtResult.appendText(c.toString());
+    	this.boxNazione.getItems().addAll(model.getCountriesGrafo());
+    	
     }
 
     @FXML
     void doSimula(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	Country c = this.boxNazione.getValue();
+    	if (c == null) {
+    		this.txtResult.setText("Devi prima scegliere una nazione tra quelle del grafo!\n");
+    		return;
+    	}
+    	model.simula(c);
+    	this.txtResult.appendText("La simulazione e' terminata al tempo T: "+model.getTempoSimulazione()+"\n");
+    	Map<Country, Integer> mappaSimulazione = this.model.getMappaSimulazione();
+    	for (Country cTemp : mappaSimulazione.keySet()) {
+    		if (mappaSimulazione.get(cTemp)>0)
+    			this.txtResult.appendText("Country "+cTemp+" --> "+mappaSimulazione.get(cTemp)+" immigrati stanziali\n");
+    	}
     }
 
     @FXML
