@@ -31,7 +31,24 @@ public class FXMLController {
 
     @FXML
     void doCalcolaConfini(ActionEvent event) {
-
+    	this.txtResult.clear();
+    	String txtAnno = this.txtAnno.getText();
+    	int anno = -1;
+    	if (txtAnno == null) {
+    		this.txtResult.setText("Devi scrivere un anno a fianco!\n");
+    		return;
+    	}
+    	try {
+    		anno= Integer.parseInt(txtAnno);
+    	}catch(NumberFormatException e) {
+    		this.txtResult.setText("L'anno deve essere un numero intero valido!\n");
+    	}
+    	if (anno < 1816 || anno > 2006) {
+    		this.txtResult.setText("Mi dispiace, non ci sono valori nel database per l'anno selezionato, "
+    				+ "devi provare con un anno compreso tra il 1816 ed il 2006!\n");
+    		return;
+    	}
+    	model.creaGrafo(anno);
     }
 
     @FXML

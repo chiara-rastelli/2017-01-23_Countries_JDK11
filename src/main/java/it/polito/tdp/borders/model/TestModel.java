@@ -6,6 +6,9 @@ public class TestModel {
 		// TODO Auto-generated method stub
 
 		Model m = new Model();
+		m.creaGrafo(1900);
+		for (CountryWithNeighbors c : m.getCountryAndConfinanti())
+			System.out.print(c.toString());
 	}
 
 }
